@@ -35,8 +35,9 @@ public class LogicaMinas {
      * @param y
      */
     public void crearMinaIniciale(int[][] matrizpaneles, int filas_columnas, String mineral, int maxMineros,String nombreMina,int x, int y){
-        Mina mina = new Mina(matrizpaneles, filas_columnas, maxMineros, null, null, x, y, mineral, 0, 0, nombreMina);
-        minas.add(mina);
+        Mina mina = new Mina(matrizpaneles, filas_columnas, maxMineros, x, y, mineral, 0, 0, nombreMina);
+        this.minas.add(mina);
+        System.out.println(mina.getDepositos());
     }
     
     /**
@@ -49,37 +50,41 @@ public class LogicaMinas {
      * @param cantidadMineral La cantidad de mienral que posee el deposito
      * @return si hubo o no cambio
      */
-    public boolean modificarmina(int posicionMina, int columna, int fila, int deposito, int cantidadMineral){
-        Mina modificar = this.minas.get(posicionMina);
-        boolean result=false;
-        int[][] matriz = modificar.getMatrizdepaneles();
-        if(deposito!=0){
-            matriz[fila][columna]= deposito;
-            this.minas.get(posicionMina).setMatrizdepaneles(matriz);
-            crearNuevoDeposito(deposito,posicionMina, cantidadMineral);
-            result=true;
-        }
-        return result;
-    }
+//    public boolean modificarmina(int posicionMina, int columna, int fila, int deposito, int cantidadMineral){
+//        Mina modificar = this.minas.get(posicionMina);
+//        boolean result=false;
+//        int[][] matriz = modificar.getMatrizdepaneles();
+//        if(deposito!=0){
+//            matriz[fila][columna]= deposito;
+//            this.minas.get(posicionMina).setMatrizdepaneles(matriz);
+//            crearNuevoDeposito(deposito,posicionMina, cantidadMineral);
+//            result=true;
+//        }
+//        return result;
+//    }
     
     /**
      *
-     * @param deposito
-     * @param posicion
-     * @param cantidad
+     * @param cantidadDeposito
+     * @param posicionI
+     * @param posicionJ
+     * @param nombreMina
      * @return 
      */
-    public boolean crearNuevoDeposito(int deposito, int posicion, int cantidad){
-        boolean result=false;
-        int cantidadMaterialActual=0;
-        for (Deposito dep : minas.get(posicion).getDepositos()) {
-            cantidadMaterialActual+= dep.getCantidadMineral();
+    public boolean crearNuevoDeposito(int cantidadDeposito, int posicionI, int posicionJ, String nombreMina) {
+        boolean result = false;
+        int cantidadMaterialActual = 0;
+        int posicion = buscarMinaNombre(nombreMina);
+        cantidadMaterialActual = minas.get(posicion).getDepositos().stream().map((dep) -> dep.getCantidadMineral()).reduce(cantidadMaterialActual, Integer::sum);
+        if (posicion != -1) {
+            if ((cantidadMaterialActual + cantidadDeposito) <= minas.get(posicion).getValorTotal()) {
+                Deposito nuevo = new Deposito(this.minas.get(posicion).getMetal(), cantidadDeposito);
+                this.minas.get(posicion).getDepositos().add(nuevo);
+                this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ] = 2;
+                result = true;
+            }
         }
-        if((cantidadMaterialActual+cantidad)<=minas.get(posicion).getValorTotal()){//Preguntar si la mina tiene maximo de material
-            Deposito nuevo = new Deposito(this.minas.get(posicion).getMetal(), cantidad);
-            minas.get(posicion).getDepositos().add(nuevo);
-            result = true;
-        }
+        System.out.println(this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ]);
         return result;
     }
     
@@ -96,6 +101,16 @@ public class LogicaMinas {
            result = true;
        }
        return result;
+    }
+
+    private int buscarMinaNombre(String nombreMina) {
+        int indexMina =-1;
+        for (Mina mina : minas) {
+            if(mina.getNombreMina().equals(nombreMina)){
+                indexMina=minas.indexOf(mina);
+            }
+        }
+        return indexMina;
     }
     
     

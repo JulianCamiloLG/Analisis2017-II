@@ -13,6 +13,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -46,30 +47,36 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         int xaux=xMina;
         int yaux=yMina;
         int xtotal=xMina;
+        long startTime = System.currentTimeMillis();
         for (int i = 0; i < tamaño; i++) {
             for (int j = 0; j < tamaño; j++) {
-                numeroPanel=""+i+j;
+                numeroPanel=""+i+"-"+j+"-"+"Mina "+cantMinas;
                 mina[i][j]=0;
-                crearPanel(xaux,yaux,numeroPanel);
+                crearPanel(xaux, yaux, numeroPanel);
                 xaux+=40;
-            }
+            } 
             xtotal+=40;
             xaux=xMina;
             yaux+=40;
         }
-        logicaMinas.crearMinaIniciale(mina, tamaño, material, minerosMaximos, "Mina "+cantMinas,xMina,40);
+        long endTime = System.currentTimeMillis();
+        System.out.println(endTime-startTime);
         
+        logicaMinas.crearMinaIniciale(mina, tamaño, material, minerosMaximos, "Mina "+cantMinas,xMina,40);
         xMina=xtotal+40;
         cantMinas++;
     }
     
     public void crearPanel(int x, int y, String nombre){
+        long startTime = System.currentTimeMillis();
         Prueba panel = new Prueba();
         panel.setBounds(x, y, 40, 40);
         panel.setName(nombre);
         panel.setFocusable(true);
         configurarEventosPanel(panel);
         this.fondo2.add(panel);
+        long endTime = System.currentTimeMillis();
+        System.out.println(endTime-startTime);
         
     }
     
@@ -105,18 +112,23 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         JButton boton1 = new JButton("convertir en deposito");
         JButton boton2 = new JButton("convertir en camino");
 
-        boton1.addActionListener((ActionEvent e) -> {
-            cambiarfondo(2,panel); 
+        boton1.addActionListener((ActionEvent e) -> { 
             int cantidadDeposito = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el total de material en este deposito"));
-            int posicion_i_matriz=Integer.parseInt(panel.getName().substring(0,1));
-            int posicion_j_matriz=Integer.parseInt(panel.getName().substring(1));
-            logicaMinas.crearNuevoDeposito(cantidadDeposito, posicion_i_matriz, posicion_j_matriz);
+            String[] indices=panel.getName().split("-");
+            int posicion_i_matriz=Integer.parseInt(indices[0]);
+            int posicion_j_matriz=Integer.parseInt(indices[1]);
+            String nombreMina=indices[2];
+            logicaMinas.crearNuevoDeposito(cantidadDeposito, posicion_i_matriz, posicion_j_matriz, nombreMina);
+             cambiarfondo(2,panel);
             
         });
         boton2.addActionListener((ActionEvent e) -> {
+            
+            String[] indices=panel.getName().split("-");
+            int posicion_i_matriz=Integer.parseInt(indices[0]);
+            int posicion_j_matriz=Integer.parseInt(indices[1]);
+            String nombreMina=indices[2];
             cambiarfondo(1,panel);
-            int posicion_i_matriz=Integer.parseInt(panel.getName().substring(0,1));
-            int posicion_j_matriz=Integer.parseInt(panel.getName().substring(1));
         });
        
         popup.add(boton1);
@@ -124,11 +136,14 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         if(!esEntrada){
             JButton boton3 = new JButton("convertir en entrada");
             boton3.addActionListener((ActionEvent e) -> {
+                
+                String[] indices=panel.getName().split("-");
+                int posicion_i_matriz=Integer.parseInt(indices[0]);
+                int posicion_j_matriz=Integer.parseInt(indices[1]);
+                String nombreMina=indices[2];
                 cambiarfondo(3,panel);
-                int posicion_i_matriz=Integer.parseInt(panel.getName().substring(0,1));
-                int posicion_j_matriz=Integer.parseInt(panel.getName().substring(1));
             });
-            popup.add(boton3);
+        popup.add(boton3);
         }
         
         popup.show(panel, 20, 0);
@@ -361,4 +376,6 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     // End of variables declaration//GEN-END:variables
+
+    
 }

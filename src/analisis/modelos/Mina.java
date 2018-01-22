@@ -45,12 +45,12 @@ public class Mina {
         this.mineros = mineros;
     }
 
-    public Mina(int[][] matrizdepaneles, int filas_columnas, int maxmineros, LinkedList<Deposito> depositos, LinkedList<Minero> mineros, int x, int y, String metal, float valorTotal, float gananciaMina, String nombre) {
+    public Mina(int[][] matrizdepaneles, int filas_columnas, int maxmineros, int x, int y, String metal, float valorTotal, float gananciaMina, String nombre) {
         this.matrizdepaneles = matrizdepaneles;
         this.filas_columnas = filas_columnas;
         this.maxmineros = maxmineros;
-        this.depositos = depositos;
-        this.mineros = mineros;
+        this.depositos = new LinkedList<>();
+        this.mineros = new LinkedList<>();
         this.x = x;
         this.y = y;
         this.metal = metal;
@@ -203,7 +203,7 @@ public class Mina {
 
     @Override
     public String toString() {
-        return super.toString(); //To change body of generated methods, choose Tools | Templates.
+        return this.getNombreMina()+" Es una mina de: "+this.getMetal();
     }
 
     /**
@@ -220,6 +220,16 @@ public class Mina {
         this.valorMineral = valorMineral;
     }
 
+    public String getNombreMina() {
+        return nombreMina;
+    }
+
+    public void setNombreMina(String nombreMina) {
+        this.nombreMina = nombreMina;
+    }
+
+    
+    
    
     
     
