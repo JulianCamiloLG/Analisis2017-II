@@ -5,28 +5,21 @@
  */
 package vistas;
 
-import java.awt.Color;
-import java.awt.Image;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.TransferHandler;
-import javax.swing.border.BevelBorder;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.Keymap;
 import logica.LogicaMinas;
 
 /**
@@ -57,7 +50,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
 
     
     public void crearMina(int tamaño, String material, int minerosMaximos) {
-
+        this.esEntrada=false;
         String numeroPanel;
         int mina[][] = new int[tamaño][tamaño];
         int xaux = xMina;
@@ -235,8 +228,8 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        botonMinas = new javax.swing.JButton();
+        botonMineros = new javax.swing.JButton();
         fondo2 = new vistas.Fondo();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -245,25 +238,29 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Minas El Álamo");
 
-        jButton1.setText("Crear Mina");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        botonMinas.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 11)); // NOI18N
+        botonMinas.setText("Crear Mina");
+        botonMinas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                botonMinasActionPerformed(evt);
             }
         });
 
-        jButton2.setText("jButton2");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        botonMineros.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 11)); // NOI18N
+        botonMineros.setText("Contratar mineros");
+        botonMineros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                botonMinerosActionPerformed(evt);
             }
         });
+
+        fondo2.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout fondo2Layout = new javax.swing.GroupLayout(fondo2);
         fondo2.setLayout(fondo2Layout);
         fondo2Layout.setHorizontalGroup(
             fondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 348, Short.MAX_VALUE)
+            .addGap(0, 300, Short.MAX_VALUE)
         );
         fondo2Layout.setVerticalGroup(
             fondo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -284,13 +281,9 @@ public class FramePruebasMinas extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(botonMineros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(botonMinas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(fondo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -302,92 +295,87 @@ public class FramePruebasMinas extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fondo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(36, 36, 36)
-                        .addComponent(jButton2)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonMinas)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonMineros)
                         .addGap(0, 134, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        getAccessibleContext().setAccessibleName("Minas El Álamo");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void botonMinasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMinasActionPerformed
         // TODO add your handling code here:
         int tamaño=Integer.parseInt(JOptionPane.showInputDialog("Digite el tamaño de la mina"));
         String material =JOptionPane.showInputDialog("Digite el material de la mina");
         int mineros =Integer.parseInt(JOptionPane.showInputDialog("Ingrese el maximo de mineros para esta mina"));
         crearMina(tamaño,material, mineros);
         this.repaint();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_botonMinasActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void botonMinerosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMinerosActionPerformed
         // TODO add your handling code here:
+        JLabel mensajeentrada = new JLabel("Para contratar de clic en el boton o enter en el campo de texto");
+        mensajeentrada.setHorizontalAlignment(JLabel.CENTER);
+        mensajeentrada.setFont(new Font("Yu Gothic UI Semilight", 1, 10));
+        
         JPopupMenu popup = new JPopupMenu();
-        JPanel itemdeprueba = new JPanel();
-        //itemdeprueba.setBorder(BorderFactory.createEtchedBorder(0, Color.DARK_GRAY, Color.BLUE));
-        try {
-            BufferedImage mimagen = ImageIO.read(new File("src/img/entrada.jpg"));
-            
-            Image reescalada = mimagen.getScaledInstance(40, 40, 0);
-            JLabel picLabel = new JLabel(new ImageIcon(reescalada));
-            picLabel.addMouseListener(new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    //System.out.println("clicked");
-                    if (e.getButton() == MouseEvent.BUTTON1)
-                        System.out.println(picLabel.getBounds());
-                }
-
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    JComponent jc = (JComponent)e.getSource();
-                    TransferHandler th = jc.getTransferHandler();
-                    th.exportAsDrag(jc, e, TransferHandler.COPY);
-                }
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    //System.out.println("realesed");
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    //System.out.println("entered");
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    //System.out.println("exit"); //To change body of generated methods, choose Tools | Templates.
-                }
-            });
-            picLabel.setTransferHandler(new TransferHandler("icon"));
-            itemdeprueba.add(picLabel);
-            
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(rootPane, "No se pudo cargar la imagen");
-        }
-        JPanel itemdeprueba2 = new JPanel();
+        int minerosMinimos=0;
+        int minerosMaximos=100;
+        int inicio=25;
         
-        BufferedImage mimagen;
-        try {
-            mimagen = ImageIO.read(new File("C:\\Users\\JulianCamilo\\Desktop\\uno.png"));
-            Image reescalada = mimagen.getScaledInstance(40, 40, 0);
-            JLabel otro = new JLabel(new ImageIcon(reescalada));
-            otro.setTransferHandler(new TransferHandler("icon"));
-             itemdeprueba2.add(otro);
-        } catch (IOException ex) {
-            Logger.getLogger(FramePruebasMinas.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            
+        JTextField setValor= new JTextField("25");
+        setValor.setHorizontalAlignment(JTextField.CENTER);
+        setValor.setFont(new Font("Yu Gothic UI Semilight", 1, 14));
         
         
-       
-        popup.add(itemdeprueba);
-        popup.add(itemdeprueba2);
-        popup.show(jButton2, 70, 0);
-    }//GEN-LAST:event_jButton2ActionPerformed
+        JSlider seleccionMineros = new JSlider(JSlider.HORIZONTAL, minerosMinimos, minerosMaximos, inicio);
+        seleccionMineros.setMajorTickSpacing(25);
+        seleccionMineros.setMinorTickSpacing(5);
+        seleccionMineros.setPaintLabels(true);
+        seleccionMineros.setPaintTicks(true);
+        seleccionMineros.setFont(new Font("Yu Gothic UI Semilight", 1, 14));
+        seleccionMineros.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider fuente =(JSlider) e.getSource();
+                String valor =fuente.getValue()+"";
+                setValor.setText(valor);
+                
+            }
+        });
+        
+        setValor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int totalMineros=Integer.parseInt(setValor.getText());
+                seleccionMineros.setValue(totalMineros);
+                System.out.println(totalMineros);
+                popup.setVisible(false);
+                JOptionPane.showMessageDialog(rootPane, "Usted a contratado: "+totalMineros+" mineros");
+                botonMineros.setEnabled(false);
+            }
+        });
+        
+        JButton botonSeleccionar= new JButton("Contratar");
+        botonSeleccionar.setFont(new Font("Yu Gothic UI Semilight", 1, 14));
+        botonSeleccionar.setHorizontalAlignment(JButton.CENTER);
+        botonSeleccionar.addActionListener((ActionEvent e) -> {
+            int totalMineros=Integer.parseInt(setValor.getText());
+            System.out.println(totalMineros);
+            popup.setVisible(false);
+            JOptionPane.showMessageDialog(rootPane, "Usted a contratado: "+totalMineros+" mineros");
+            botonMineros.setEnabled(false);
+        });
+        
+        popup.add(mensajeentrada);
+        popup.add(seleccionMineros);
+        popup.add(setValor);
+        popup.add(botonSeleccionar);
+        popup.show(botonMineros, 0,40);
+    }//GEN-LAST:event_botonMinerosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -425,9 +413,9 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonMinas;
+    private javax.swing.JButton botonMineros;
     private vistas.Fondo fondo2;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;

@@ -36,7 +36,7 @@ public class Fondo extends javax.swing.JPanel {
         if(!this.isDetalleMina()){
             System.out.println("Entre al detalle");
             detalles.stream().map((detalle) -> detalle.split("-")).forEachOrdered((datos) -> {
-                g.drawString(datos[0], Integer.parseInt(datos[1])-50, Integer.parseInt(datos[2])+10);
+                g.drawString(datos[0], Integer.parseInt(datos[1])-60, Integer.parseInt(datos[2])+10);
             });
         }
     }
