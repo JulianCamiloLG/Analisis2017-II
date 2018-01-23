@@ -35,7 +35,7 @@ public class LogicaMinas {
      * @param y
      */
     public void crearMinaIniciale(int[][] matrizpaneles, int filas_columnas, String mineral, int maxMineros,String nombreMina,int x, int y){
-        Mina mina = new Mina(matrizpaneles, filas_columnas, maxMineros, x, y, mineral, 0, 0, nombreMina);
+        Mina mina = new Mina(matrizpaneles, filas_columnas, maxMineros, x, y, mineral, 500000, 0, nombreMina);
         this.minas.add(mina);
         System.out.println(mina.getDepositos());
     }
@@ -80,11 +80,10 @@ public class LogicaMinas {
             if ((cantidadMaterialActual + cantidadDeposito) <= minas.get(posicion).getValorTotal()) {
                 Deposito nuevo = new Deposito(this.minas.get(posicion).getMetal(), cantidadDeposito);
                 this.minas.get(posicion).getDepositos().add(nuevo);
-                this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ] = 2;
+                this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ]=2;
                 result = true;
             }
         }
-        System.out.println(this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ]);
         return result;
     }
     
@@ -112,7 +111,35 @@ public class LogicaMinas {
         }
         return indexMina;
     }
+
+    public boolean crearCamino(String nombreMina, int posicion_i_matriz, int posicion_j_matriz) {
+        boolean result = false;
+        int minaModificar = buscarMinaNombre(nombreMina);
+        if (minaModificar != -1) {
+            this.minas.get(minaModificar).getMatrizdepaneles()[posicion_i_matriz][posicion_j_matriz] = 1;
+            result = true;
+        }
+        return result;
+
+    }
     
+    public boolean crearEntrada(String nombreMina, int posicion_i_matriz, int posicion_j_matriz) {
+    boolean result = false;
+        int minaModificar = buscarMinaNombre(nombreMina);
+        if (minaModificar != -1) {
+            this.minas.get(minaModificar).getMatrizdepaneles()[posicion_i_matriz][posicion_j_matriz] = 3;
+            result = true;
+        }
+        return result;
+    }
     
-    
+    public boolean cancelarCambio(String nombreMina, int posicion_i_matriz, int posicion_j_matriz) {
+    boolean result = false;
+        int minaModificar = buscarMinaNombre(nombreMina);
+        if (minaModificar != -1) {
+            this.minas.get(minaModificar).getMatrizdepaneles()[posicion_i_matriz][posicion_j_matriz] = 0;
+            result = true;
+        }
+        return result;
+    }
 }

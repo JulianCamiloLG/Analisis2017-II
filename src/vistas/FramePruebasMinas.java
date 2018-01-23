@@ -8,6 +8,7 @@ package vistas;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -47,7 +48,6 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         int xaux=xMina;
         int yaux=yMina;
         int xtotal=xMina;
-        long startTime = System.currentTimeMillis();
         for (int i = 0; i < tamaño; i++) {
             for (int j = 0; j < tamaño; j++) {
                 numeroPanel=""+i+"-"+j+"-"+"Mina "+cantMinas;
@@ -59,25 +59,18 @@ public class FramePruebasMinas extends javax.swing.JFrame {
             xaux=xMina;
             yaux+=40;
         }
-        long endTime = System.currentTimeMillis();
-        System.out.println(endTime-startTime);
-        
         logicaMinas.crearMinaIniciale(mina, tamaño, material, minerosMaximos, "Mina "+cantMinas,xMina,40);
         xMina=xtotal+40;
         cantMinas++;
     }
     
     public void crearPanel(int x, int y, String nombre){
-        long startTime = System.currentTimeMillis();
         Prueba panel = new Prueba();
         panel.setBounds(x, y, 40, 40);
         panel.setName(nombre);
         panel.setFocusable(true);
         configurarEventosPanel(panel);
         this.fondo2.add(panel);
-        long endTime = System.currentTimeMillis();
-        System.out.println(endTime-startTime);
-        
     }
     
     public void configurarEventosPanel(Prueba panel) {
@@ -109,48 +102,99 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     
     public void mostrarOpciones(Prueba panel){
         JPopupMenu popup = new JPopupMenu();
-        JButton boton1 = new JButton("convertir en deposito");
-        JButton boton2 = new JButton("convertir en camino");
+        JButton botonDeposito = new JButton("convertir en deposito");
+        JButton botonCamino = new JButton("convertir en camino");
+        JButton botonReset = new JButton("Cancelar");
 
-        boton1.addActionListener((ActionEvent e) -> { 
-            int cantidadDeposito = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el total de material en este deposito"));
-            String[] indices=panel.getName().split("-");
-            int posicion_i_matriz=Integer.parseInt(indices[0]);
-            int posicion_j_matriz=Integer.parseInt(indices[1]);
-            String nombreMina=indices[2];
-            logicaMinas.crearNuevoDeposito(cantidadDeposito, posicion_i_matriz, posicion_j_matriz, nombreMina);
-             cambiarfondo(2,panel);
-            
+        botonDeposito.addActionListener((ActionEvent e) -> { 
+            convertirDeposito(panel);
+            popup.setVisible(false);
         });
-        boton2.addActionListener((ActionEvent e) -> {
-            
-            String[] indices=panel.getName().split("-");
-            int posicion_i_matriz=Integer.parseInt(indices[0]);
-            int posicion_j_matriz=Integer.parseInt(indices[1]);
-            String nombreMina=indices[2];
-            cambiarfondo(1,panel);
+        botonCamino.addActionListener((ActionEvent e) -> {
+            convertirCamino(panel);
+            popup.setVisible(false);
         });
-       
-        popup.add(boton1);
-        popup.add(boton2);
+        botonReset.addActionListener((ActionEvent e) -> {
+            resetPanel(panel);
+            popup.setVisible(false);
+        });
+        popup.add(botonDeposito);
+        popup.add(botonCamino);
+        popup.add(botonReset);
         if(!esEntrada){
-            JButton boton3 = new JButton("convertir en entrada");
-            boton3.addActionListener((ActionEvent e) -> {
-                
-                String[] indices=panel.getName().split("-");
-                int posicion_i_matriz=Integer.parseInt(indices[0]);
-                int posicion_j_matriz=Integer.parseInt(indices[1]);
-                String nombreMina=indices[2];
-                cambiarfondo(3,panel);
+            JButton botonEntrada = new JButton("convertir en entrada");
+            botonEntrada.addActionListener((ActionEvent e) -> {
+                convertirEntrada(panel);
+                popup.setVisible(false);
             });
-        popup.add(boton3);
+        popup.add(botonEntrada);
         }
         
         popup.show(panel, 20, 0);
         
     }
     
-    public void cambiarfondo(int fondo, Prueba panel){
+    private void convertirDeposito(Prueba panel) {
+        int cantidadDeposito = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el total de material en este deposito"));
+        String[] datos=ArrayDatosPanel(panel);
+        boolean result=logicaMinas.crearNuevoDeposito(cantidadDeposito,Integer.parseInt(datos[1]),Integer.parseInt(datos[2]),datos[0]);
+        if (result) {
+            cambiarfondo(2, panel);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "ERROR: Exceso en la cantidad de mineral en el deposito");
+        }
+
+    }
+    
+    private void convertirCamino(Prueba panel){
+        String[] datos=ArrayDatosPanel(panel);
+        boolean result=logicaMinas.crearCamino(datos[0],Integer.parseInt(datos[1]),Integer.parseInt(datos[2]));
+        if (result) {
+            cambiarfondo(1,panel);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "ERROR: No se pudo crear el camino");
+        }
+        
+    }
+    
+    private void convertirEntrada(Prueba panel){
+        String[] datos=ArrayDatosPanel(panel);
+        boolean result=logicaMinas.crearEntrada(datos[0],Integer.parseInt(datos[1]),Integer.parseInt(datos[2]));
+        if (result) {
+            cambiarfondo(3,panel);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "ERROR: No se pudo crear la entrada");
+        }
+        
+    }
+    
+    private void resetPanel(Prueba panel){
+        String[] datos=ArrayDatosPanel(panel);
+        boolean result=logicaMinas.cancelarCambio(datos[0],Integer.parseInt(datos[1]),Integer.parseInt(datos[2]));
+        if (result) {
+            cambiarfondo(0,panel);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "ERROR: No se pudo revertir el cambio");
+        }
+        
+    }
+    
+    private String[] ArrayDatosPanel(Prueba panel){
+        String[] datos= new String[3];
+        String[] indices=panel.getName().split("-");
+        String posicion_i_matriz=indices[0];
+        String posicion_j_matriz=indices[1];
+        String nombreMina=indices[2];
+        
+        datos[0]=nombreMina;
+        datos[1]=posicion_i_matriz;
+        datos[2]=posicion_j_matriz;
+        
+        return datos;
+    }
+    
+    
+    private void cambiarfondo(int fondo, Prueba panel){
         if(fondo==3){
             esEntrada=true;
         }
@@ -376,6 +420,8 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     // End of variables declaration//GEN-END:variables
+
+    
 
     
 }
