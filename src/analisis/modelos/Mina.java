@@ -45,7 +45,7 @@ public class Mina {
         this.mineros = mineros;
     }
 
-    public Mina(int[][] matrizdepaneles, int filas_columnas, int maxmineros, int x, int y, String metal, float valorTotal, float gananciaMina, String nombre) {
+    public Mina(int[][] matrizdepaneles, int filas_columnas, int maxmineros, String metal, float valorTotal, float gananciaMina, String nombre) {
         this.matrizdepaneles = matrizdepaneles;
         this.filas_columnas = filas_columnas;
         this.maxmineros = maxmineros;

@@ -6,6 +6,7 @@
 package vistas;
 
 import java.awt.Graphics;
+import java.util.LinkedList;
 
 /**
  *
@@ -13,17 +14,31 @@ import java.awt.Graphics;
  */
 public class Fondo extends javax.swing.JPanel {
 
+    private boolean detalleMina;
+    private LinkedList<String> detalles;
+    
+    
     /**
      * Creates new form Fondo
      */
     public Fondo() {
         initComponents();
+        this.detalleMina=true;
+        this.detalles=new LinkedList<>();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
         g.drawString("Bienvenido a Minas El Álamo", this.getWidth()/2-70, 20);
+        
+        
+        if(!this.isDetalleMina()){
+            System.out.println("Entre al detalle");
+            detalles.stream().map((detalle) -> detalle.split("-")).forEachOrdered((datos) -> {
+                g.drawString(datos[0], Integer.parseInt(datos[1])-50, Integer.parseInt(datos[2])+10);
+            });
+        }
     }
     
     
@@ -37,6 +52,7 @@ public class Fondo extends javax.swing.JPanel {
     private void initComponents() {
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -49,6 +65,34 @@ public class Fondo extends javax.swing.JPanel {
             .addGap(0, 296, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    /**
+     * @return the detalleMina
+     */
+    public boolean isDetalleMina() {
+        return detalleMina;
+    }
+
+    /**
+     * @param detalleMina the detalleMina to set
+     */
+    public void setDetalleMina(boolean detalleMina) {
+        this.detalleMina = detalleMina;
+    }
+
+    public static int getABORT() {
+        return ABORT;
+    }
+
+    public LinkedList getDetalle() {
+        return detalles;
+    }
+
+    public void setDetalle(LinkedList detalle) {
+        this.detalles = detalle;
+    }
+    
+    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

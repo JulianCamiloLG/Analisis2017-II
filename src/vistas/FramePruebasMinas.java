@@ -40,28 +40,43 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     private LogicaMinas logicaMinas;
     private int xMina;
     private int yMina;
+    private LinkedList<String> detalles;
     
-    public void crearMina(int tamaño, String material, int minerosMaximos){
-        
+      /**
+     * Creates new form FramePruebasMinas
+     */
+    public FramePruebasMinas() {
+        initComponents();
+        this.esEntrada=false;
+        this.logicaMinas= new LogicaMinas();
+        this.cantMinas=1;
+        this.xMina=40;
+        this.yMina=40;
+        this.detalles= new LinkedList<>();
+    }
+
+    
+    public void crearMina(int tamaño, String material, int minerosMaximos) {
+
         String numeroPanel;
         int mina[][] = new int[tamaño][tamaño];
-        int xaux=xMina;
-        int yaux=yMina;
-        int xtotal=xMina;
+        int xaux = xMina;
+        int yaux = yMina;
+        int xtotal = xMina;
         for (int i = 0; i < tamaño; i++) {
             for (int j = 0; j < tamaño; j++) {
-                numeroPanel=""+i+"-"+j+"-"+"Mina "+cantMinas;
-                mina[i][j]=0;
+                numeroPanel = "" + i + "-" + j + "-" + "Mina " + cantMinas;
+                mina[i][j] = 0;
                 crearPanel(xaux, yaux, numeroPanel);
-                xaux+=40;
-            } 
-            xtotal+=40;
-            xaux=xMina;
-            yaux+=40;
+                xaux += 40;
+            }
+            xtotal += 40;
+            xaux = xMina;
+            yaux += 40;
         }
-        logicaMinas.crearMinaIniciale(mina, tamaño, material, minerosMaximos, "Mina "+cantMinas,xMina,40);
-        xMina=xtotal+40;
-        cantMinas++;
+        logicaMinas.crearMinaIniciale(mina, tamaño, material, minerosMaximos, "Mina " + cantMinas);
+        xMina = xtotal + 40;
+        crearDetalleMina(material,xtotal,yaux);
     }
     
     public void crearPanel(int x, int y, String nombre){
@@ -100,13 +115,13 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         });
     }
     
-    public void mostrarOpciones(Prueba panel){
+    public void mostrarOpciones(Prueba panel) {
         JPopupMenu popup = new JPopupMenu();
         JButton botonDeposito = new JButton("convertir en deposito");
         JButton botonCamino = new JButton("convertir en camino");
         JButton botonReset = new JButton("Cancelar");
 
-        botonDeposito.addActionListener((ActionEvent e) -> { 
+        botonDeposito.addActionListener((ActionEvent e) -> {
             convertirDeposito(panel);
             popup.setVisible(false);
         });
@@ -121,17 +136,17 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         popup.add(botonDeposito);
         popup.add(botonCamino);
         popup.add(botonReset);
-        if(!esEntrada){
+        if (!esEntrada) {
             JButton botonEntrada = new JButton("convertir en entrada");
             botonEntrada.addActionListener((ActionEvent e) -> {
                 convertirEntrada(panel);
                 popup.setVisible(false);
             });
-        popup.add(botonEntrada);
+            popup.add(botonEntrada);
         }
-        
+
         popup.show(panel, 20, 0);
-        
+
     }
     
     private void convertirDeposito(Prueba panel) {
@@ -179,17 +194,17 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         
     }
     
-    private String[] ArrayDatosPanel(Prueba panel){
-        String[] datos= new String[3];
-        String[] indices=panel.getName().split("-");
-        String posicion_i_matriz=indices[0];
-        String posicion_j_matriz=indices[1];
-        String nombreMina=indices[2];
-        
-        datos[0]=nombreMina;
-        datos[1]=posicion_i_matriz;
-        datos[2]=posicion_j_matriz;
-        
+    private String[] ArrayDatosPanel(Prueba panel) {
+        String[] datos = new String[3];
+        String[] indices = panel.getName().split("-");
+        String posicion_i_matriz = indices[0];
+        String posicion_j_matriz = indices[1];
+        String nombreMina = indices[2];
+
+        datos[0] = nombreMina;
+        datos[1] = posicion_i_matriz;
+        datos[2] = posicion_j_matriz;
+
         return datos;
     }
     
@@ -202,18 +217,15 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         panel.repaint();
     }
     
-    /**
-     * Creates new form FramePruebasMinas
-     */
-    public FramePruebasMinas() {
-        initComponents();
-        this.esEntrada=false;
-        this.logicaMinas= new LogicaMinas();
-        this.cantMinas=1;
-        this.xMina=40;
-        this.yMina=40;
+    private void crearDetalleMina(String material, int xtotal, int yaux){
+        this.detalles.add("Mina "+cantMinas+" de "+material+"-"+xtotal+"-"+yaux);
+        this.fondo2.setDetalle(detalles);
+        this.fondo2.setDetalleMina(true);
+        this.repaint();
+        this.fondo2.setDetalleMina(false);
+        cantMinas++;
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

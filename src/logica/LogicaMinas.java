@@ -34,8 +34,8 @@ public class LogicaMinas {
      * @param x
      * @param y
      */
-    public void crearMinaIniciale(int[][] matrizpaneles, int filas_columnas, String mineral, int maxMineros,String nombreMina,int x, int y){
-        Mina mina = new Mina(matrizpaneles, filas_columnas, maxMineros, x, y, mineral, 500000, 0, nombreMina);
+    public void crearMinaIniciale(int[][] matrizpaneles, int filas_columnas, String mineral, int maxMineros,String nombreMina){
+        Mina mina = new Mina(matrizpaneles, filas_columnas, maxMineros, mineral, 500000, 0, nombreMina);
         this.minas.add(mina);
         System.out.println(mina.getDepositos());
     }
