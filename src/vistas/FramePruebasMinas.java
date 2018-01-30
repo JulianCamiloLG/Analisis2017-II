@@ -10,8 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -19,7 +23,9 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.Keymap;
+import logica.LogicaJSON;
 import logica.LogicaMinas;
 
 /**
@@ -130,12 +136,17 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         popup.add(botonCamino);
         popup.add(botonReset);
         if (!esEntrada) {
-            JButton botonEntrada = new JButton("convertir en entrada");
-            botonEntrada.addActionListener((ActionEvent e) -> {
-                convertirEntrada(panel);
-                popup.setVisible(false);
-            });
-            popup.add(botonEntrada);
+            String[] datos = ArrayDatosPanel(panel);
+            boolean esFactibleEntrada = this.logicaMinas.isEntrada(Integer.parseInt(datos[1]), Integer.parseInt(datos[2]), datos[0]);
+            if (esFactibleEntrada) {
+                JButton botonEntrada = new JButton("convertir en entrada");
+                botonEntrada.addActionListener((ActionEvent e) -> {
+                    convertirEntrada(panel);
+                    popup.setVisible(false);
+                });
+                popup.add(botonEntrada);
+            }
+
         }
 
         popup.show(panel, 20, 0);
@@ -203,9 +214,6 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     
     
     private void cambiarfondo(int fondo, Prueba panel){
-        if(fondo==3){
-            esEntrada=true;
-        }
         panel.setFondo(fondo);
         panel.repaint();
     }
@@ -233,6 +241,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         fondo2 = new vistas.Fondo();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        JSON = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -268,6 +277,15 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         );
 
         jMenu1.setText("File");
+
+        JSON.setText("Cargar JSON");
+        JSON.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JSONActionPerformed(evt);
+            }
+        });
+        jMenu1.add(JSON);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
@@ -308,11 +326,19 @@ public class FramePruebasMinas extends javax.swing.JFrame {
 
     private void botonMinasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMinasActionPerformed
         // TODO add your handling code here:
-        int tamaño=Integer.parseInt(JOptionPane.showInputDialog("Digite el tamaño de la mina"));
+        String input =JOptionPane.showInputDialog("Digite el tamaño de la mina");
+        int tamaño=0;
+        if (input ==null) {
+            System.out.println("Cancelo");
+            
+        }
+        else{
+        tamaño=Integer.parseInt(input);
         String material =JOptionPane.showInputDialog("Digite el material de la mina");
         int mineros =Integer.parseInt(JOptionPane.showInputDialog("Ingrese el maximo de mineros para esta mina"));
         crearMina(tamaño,material, mineros);
         this.repaint();
+        }
     }//GEN-LAST:event_botonMinasActionPerformed
 
     private void botonMinerosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMinerosActionPerformed
@@ -377,6 +403,25 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         popup.show(botonMineros, 0,40);
     }//GEN-LAST:event_botonMinerosActionPerformed
 
+    private void JSONActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JSONActionPerformed
+        // TODO add your handling code here:
+        String ruta="";
+        JFileChooser escogerRuta= new JFileChooser();
+        escogerRuta.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        escogerRuta.addChoosableFileFilter(new FileNameExtensionFilter("*.json", "json"));
+        int returnVal;
+        returnVal = escogerRuta.showOpenDialog(escogerRuta);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            ruta=escogerRuta.getSelectedFile().getAbsolutePath();
+            LogicaJSON archivoJSON = new LogicaJSON(ruta);
+            try {
+                archivoJSON.AbrirJSON();
+            } catch (FileNotFoundException ex) {
+                System.out.println("error json");
+            }
+        }
+    }//GEN-LAST:event_JSONActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -413,6 +458,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem JSON;
     private javax.swing.JButton botonMinas;
     private javax.swing.JButton botonMineros;
     private vistas.Fondo fondo2;

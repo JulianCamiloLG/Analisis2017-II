@@ -25,6 +25,7 @@ public class Mina {
     private float gananciaMina;
     private float valorMineral;
     private String nombreMina;
+    private boolean tieneEntrada;
 
     public Mina() {
     }
@@ -51,12 +52,11 @@ public class Mina {
         this.maxmineros = maxmineros;
         this.depositos = new LinkedList<>();
         this.mineros = new LinkedList<>();
-        this.x = x;
-        this.y = y;
         this.metal = metal;
         this.valorTotal = valorTotal;
         this.gananciaMina = gananciaMina;
         this.nombreMina =nombre;
+        this.tieneEntrada=false;
     }
 
     
@@ -226,6 +226,14 @@ public class Mina {
 
     public void setNombreMina(String nombreMina) {
         this.nombreMina = nombreMina;
+    }
+
+    public boolean isTieneEntrada() {
+        return tieneEntrada;
+    }
+
+    public void setTieneEntrada(boolean tieneEntrada) {
+        this.tieneEntrada = tieneEntrada;
     }
 
     
