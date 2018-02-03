@@ -33,9 +33,13 @@ public class LogicaJSON{
         File archivo = new File(route);
         InputStream lector = new FileInputStream(archivo);
         JsonReader reader = Json.createReader(lector);
-        JsonArray objetojson = (JsonArray) reader.read();
-        JsonObject objetito = objetojson.getJsonObject(0);
-        System.out.println(objetito.keySet());
+        System.out.println(reader);
+        JsonArray objetojson =  reader.readArray();
+        System.out.println(objetojson);
+        JsonObject objetito = objetojson.getJsonObject(1);
+        JsonObject objetito2 =objetojson.getJsonObject(2);
+        System.out.println(objetito);
+        System.out.println(objetito2.getJsonArray("minas").getJsonObject(0));
     }
     
 }
