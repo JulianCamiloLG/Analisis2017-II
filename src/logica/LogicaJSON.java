@@ -38,8 +38,15 @@ public class LogicaJSON{
         System.out.println(objetojson);
         JsonObject objetito = objetojson.getJsonObject(1);
         JsonObject objetito2 =objetojson.getJsonObject(2);
+        JsonArray objeto2 = objetito2.getJsonArray("minas");
+        JsonObject objeto3= objeto2.getJsonObject(0);
+        JsonObject objeto4 = objeto3.getJsonObject("0");
         System.out.println(objetito);
-        System.out.println(objetito2.getJsonArray("minas").getJsonObject(0));
+        for (JsonValue string : objeto4.values()) {
+            System.out.println(string);
+        }
+        System.out.println(objeto3.values());
+        System.out.println(objeto4.getJsonArray("seccionesMina"));
     }
     
 }
