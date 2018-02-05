@@ -410,12 +410,14 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         escogerRuta.setFileSelectionMode(JFileChooser.FILES_ONLY);
         escogerRuta.addChoosableFileFilter(new FileNameExtensionFilter("*.json", "json"));
         int returnVal;
+        Object datos[]= new Object[3];
         returnVal = escogerRuta.showOpenDialog(escogerRuta);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             ruta=escogerRuta.getSelectedFile().getAbsolutePath();
             LogicaJSON archivoJSON = new LogicaJSON(ruta);
             try {
-                archivoJSON.AbrirJSON();
+                 datos=archivoJSON.AbrirJSON();
+                 System.out.println(datos[0]+"\n"+datos[1]+"\n"+datos[2]);
             } catch (FileNotFoundException ex) {
                 System.out.println("error json");
             }
