@@ -17,7 +17,6 @@ public class Mina {
     private int filas_columnas;
     private int maxmineros;
     private LinkedList<Deposito> depositos;
-    private LinkedList<Minero> mineros;
     private int x;
     private int y;
     private String metal;
@@ -26,6 +25,7 @@ public class Mina {
     private float valorMineral;
     private String nombreMina;
     private boolean tieneEntrada;
+    private int minerosContratados;
 
     public Mina() {
     }
@@ -38,12 +38,11 @@ public class Mina {
         this.metal=metal;
     }
 
-    public Mina(int[][] matrizdepaneles, int filas_columnas, int maxmineros, LinkedList<Deposito> depositos, LinkedList<Minero> mineros) {
+    public Mina(int[][] matrizdepaneles, int filas_columnas, int maxmineros, LinkedList<Deposito> depositos) {
         this.matrizdepaneles = matrizdepaneles;
         this.filas_columnas = filas_columnas;
         this.maxmineros = maxmineros;
         this.depositos = depositos;
-        this.mineros = mineros;
     }
 
     public Mina(int[][] matrizdepaneles, int filas_columnas, int maxmineros, String metal, float valorTotal, float gananciaMina, String nombre) {
@@ -51,7 +50,6 @@ public class Mina {
         this.filas_columnas = filas_columnas;
         this.maxmineros = maxmineros;
         this.depositos = new LinkedList<>();
-        this.mineros = new LinkedList<>();
         this.metal = metal;
         this.valorTotal = valorTotal;
         this.gananciaMina = gananciaMina;
@@ -117,19 +115,8 @@ public class Mina {
         this.depositos = depositos;
     }
 
-    /**
-     * @return the mineros
-     */
-    public LinkedList<Minero> getMineros() {
-        return mineros;
-    }
 
-    /**
-     * @param mineros the mineros to set
-     */
-    public void setMineros(LinkedList<Minero> mineros) {
-        this.mineros = mineros;
-    }
+
 
     /**
      * @return the x

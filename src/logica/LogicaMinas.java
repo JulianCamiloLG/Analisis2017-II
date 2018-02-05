@@ -34,8 +34,8 @@ public class LogicaMinas {
      * @param x
      * @param y
      */
-    public void crearMinaIniciale(int[][] matrizpaneles, int filas_columnas, String mineral, int maxMineros,String nombreMina){
-        Mina mina = new Mina(matrizpaneles, filas_columnas, maxMineros, mineral, 500000, 0, nombreMina);
+    public void crearMinaIniciale(int[][] matrizpaneles, int filas_columnas, String mineral, int maxMineros,String nombreMina, int capacidadDeposito){
+        Mina mina = new Mina(matrizpaneles, filas_columnas, maxMineros, mineral, capacidadDeposito, maxMineros, nombreMina);
         this.minas.add(mina);
     }
     
@@ -99,7 +99,6 @@ public class LogicaMinas {
     public boolean ingresarMineros(int posicionMina, LinkedList mineros){
        boolean result=false;
        if(this.minas.get(posicionMina).getMaxmineros()==mineros.size()){
-           this.minas.get(posicionMina).setMineros(mineros);
            result = true;
        }
        return result;

@@ -32,25 +32,65 @@ public class LogicaJSON{
         this.route = route;
     }
     
-    public LinkedHashMap AbrirJSON() throws FileNotFoundException{
-        LinkedHashMap<String, LinkedList<String[]>> infoMinasCompleta= new LinkedHashMap<>();
+    public Object[] AbrirJSON() throws FileNotFoundException{
+        Object datos[] = new Object[3];
+        LinkedHashMap<String,String[]> infoMinasCompleta;
+        String aMinas[];
+        int aMineros[];
         File archivo = new File(route);
         InputStream lector = new FileInputStream(archivo);
         JsonReader lectorJson = Json.createReader(lector);
         JsonArray arregloCompleto =  lectorJson.readArray();
-        extraerInfoMineros(arregloCompleto.getJsonObject(0));
-        infoMinasCompleta=extraerMinas(arregloCompleto.getJsonObject(1));
-        return infoMinasCompleta;
+        
+        aMineros = extraerInfoMineros(arregloCompleto.getJsonObject(0));
+        aMinas=extraerMinas(arregloCompleto.getJsonObject(1));
+        infoMinasCompleta= todasLasMinas(arregloCompleto.getJsonObject(2));
+        
+        datos[0]=aMineros;
+        datos[1]=aMinas;
+        datos[2]=infoMinasCompleta;
+        return datos;
     }
 
-    private void extraerInfoMineros(JsonObject mineros) {
-        System.out.println(mineros);
+    private int[] extraerInfoMineros(JsonObject mineros) {
+        int arregloMineros[] = new int[5];
         JsonObject minerosCompleto=mineros.getJsonObject("infomineros");
-        System.out.println(minerosCompleto);
+        int cont=0;
+        for (JsonValue object : minerosCompleto.values()) {
+            arregloMineros[cont]=Integer.parseInt(object.toString());
+            cont++;
+        }
+        return arregloMineros;
     }
 
-    private LinkedHashMap<String, LinkedList<String[]>> extraerMinas(JsonObject jsonObject) {
-        return null;
+    private String[] extraerMinas(JsonObject minas) {
+        String aMinas[]= new String[7];
+        JsonObject generalMina=minas.getJsonObject("infominas");
+        int cont=0;
+        for (JsonValue value : generalMina.values()) {
+            aMinas[cont]=value.toString();
+            cont++; 
+        }
+        return aMinas;
+    }
+
+    private LinkedHashMap<String, String[]> todasLasMinas(JsonObject jsonObject) {
+        JsonArray arregloMinas = jsonObject.getJsonArray("minas");
+        LinkedHashMap<String, String[]> infoMinasCompleta= new LinkedHashMap<>();
+        String detalles[]= new String[12];
+        for (JsonValue arregloMina : arregloMinas) {
+            int cont=0;
+            JsonObject minaActual= (JsonObject) arregloMina;
+            String nombreMina = "Mina "+minaActual.keySet().toString().substring(1, 2);
+            JsonObject detalleMina = minaActual.getJsonObject(minaActual.keySet().toString().substring(1, 2));
+            for (JsonValue string : detalleMina.values()) {
+                System.out.println(cont);
+                detalles[cont]=string.toString();
+                cont++;
+            }
+            infoMinasCompleta.put(nombreMina, detalles);
+        }
+        return infoMinasCompleta;
     }
     
 }

@@ -12,8 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -21,10 +19,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.Keymap;
 import logica.LogicaJSON;
 import logica.LogicaMinas;
 
@@ -40,6 +38,8 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     private int xMina;
     private int yMina;
     private LinkedList<String> detalles;
+    Font fuente;
+    UIManager ui;
     
       /**
      * Creates new form FramePruebasMinas
@@ -48,14 +48,19 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         initComponents();
         this.esEntrada=false;
         this.logicaMinas= new LogicaMinas();
-        this.cantMinas=1;
+        this.cantMinas=0;
         this.xMina=40;
         this.yMina=40;
         this.detalles= new LinkedList<>();
+        this.ui= new UIManager();
+        this.fuente=new Font("Yu Gothic UI Semilight", 1, 14);
+        this.ui.put("OptionPane.messageFont",fuente );
+        this.ui.put("OptionPane.buttonFont",fuente );
+        
     }
 
     
-    public void crearMina(int tamaño, String material, int minerosMaximos) {
+    public void crearMina(int tamaño, String material, int minerosMaximos, int capacidadDeposito) {
         this.esEntrada=false;
         String numeroPanel;
         int mina[][] = new int[tamaño][tamaño];
@@ -73,7 +78,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
             xaux = xMina;
             yaux += 40;
         }
-        logicaMinas.crearMinaIniciale(mina, tamaño, material, minerosMaximos, "Mina " + cantMinas);
+        logicaMinas.crearMinaIniciale(mina, tamaño, material, minerosMaximos, "Mina " + cantMinas,capacidadDeposito);
         xMina = xtotal + 40;
         crearDetalleMina(material,xtotal,yaux);
     }
@@ -117,8 +122,11 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     public void mostrarOpciones(Prueba panel) {
         JPopupMenu popup = new JPopupMenu();
         JButton botonDeposito = new JButton("convertir en deposito");
+        botonDeposito.setFont(fuente);
         JButton botonCamino = new JButton("convertir en camino");
+        botonCamino.setFont(fuente);
         JButton botonReset = new JButton("Cancelar");
+        botonReset.setFont(fuente);
 
         botonDeposito.addActionListener((ActionEvent e) -> {
             convertirDeposito(panel);
@@ -140,6 +148,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
             boolean esFactibleEntrada = this.logicaMinas.isEntrada(Integer.parseInt(datos[1]), Integer.parseInt(datos[2]), datos[0]);
             if (esFactibleEntrada) {
                 JButton botonEntrada = new JButton("convertir en entrada");
+                botonEntrada.setFont(fuente);
                 botonEntrada.addActionListener((ActionEvent e) -> {
                     convertirEntrada(panel);
                     popup.setVisible(false);
@@ -242,6 +251,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         JSON = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -277,7 +287,10 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         );
 
         jMenu1.setText("File");
+        jMenu1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 12)); // NOI18N
 
+        JSON.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 12)); // NOI18N
+        JSON.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/upload.png"))); // NOI18N
         JSON.setText("Cargar JSON");
         JSON.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -286,9 +299,15 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         });
         jMenu1.add(JSON);
 
+        jMenuItem1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 12)); // NOI18N
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/download.png"))); // NOI18N
+        jMenuItem1.setText("Guardar JSON");
+        jMenu1.add(jMenuItem1);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
+        jMenu2.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 12)); // NOI18N
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -326,26 +345,38 @@ public class FramePruebasMinas extends javax.swing.JFrame {
 
     private void botonMinasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMinasActionPerformed
         // TODO add your handling code here:
-        String input =JOptionPane.showInputDialog("Digite el tamaño de la mina");
-        int tamaño=0;
-        if (input ==null) {
-            System.out.println("Cancelo");
-            
-        }
-        else{
-        tamaño=Integer.parseInt(input);
-        String material =JOptionPane.showInputDialog("Digite el material de la mina");
-        int mineros =Integer.parseInt(JOptionPane.showInputDialog("Ingrese el maximo de mineros para esta mina"));
-        crearMina(tamaño,material, mineros);
-        this.repaint();
+        Object seleccion[] = new Object[3];
+        seleccion[0] = "Oro";
+        seleccion[1] = "Plata";
+        seleccion[2] = "Cobre";
+        String mensaje = "Digite el tamaño de la mina";
+        String input = (String) JOptionPane.showInputDialog(null, mensaje, "tamaño de la mina", JOptionPane.PLAIN_MESSAGE, null, null, null);
+        int tamaño = 0;
+        if (input != null) {
+            tamaño = Integer.parseInt(input);
+            String material = (String) JOptionPane.showInputDialog(null, "Digite el material de la mina", "materiales", JOptionPane.INFORMATION_MESSAGE, null, seleccion, null);
+            if (material != null) {
+                String min = JOptionPane.showInputDialog("Ingrese el maximo de mineros para esta mina", 30);
+                if(min != null){
+                    String dep = JOptionPane.showInputDialog("Ingrese la capacidad maxima de deposito de esta mina", 500);
+                    if (dep != null) {
+                        int mineros = Integer.parseInt(dep);
+                        int deposito = Integer.parseInt(min);
+                        crearMina(tamaño, material, mineros, deposito);
+                        this.repaint();
+                    }
+                }
+            }
         }
     }//GEN-LAST:event_botonMinasActionPerformed
 
     private void botonMinerosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMinerosActionPerformed
         // TODO add your handling code here:
+        
+        
         JLabel mensajeentrada = new JLabel("Para contratar de clic en el boton o enter en el campo de texto");
         mensajeentrada.setHorizontalAlignment(JLabel.CENTER);
-        mensajeentrada.setFont(new Font("Yu Gothic UI Semilight", 1, 10));
+        mensajeentrada.setFont(fuente);
         
         JPopupMenu popup = new JPopupMenu();
         int minerosMinimos=0;
@@ -354,7 +385,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         
         JTextField setValor= new JTextField("25");
         setValor.setHorizontalAlignment(JTextField.CENTER);
-        setValor.setFont(new Font("Yu Gothic UI Semilight", 1, 14));
+        setValor.setFont(fuente);
         
         
         JSlider seleccionMineros = new JSlider(JSlider.HORIZONTAL, minerosMinimos, minerosMaximos, inicio);
@@ -362,7 +393,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         seleccionMineros.setMinorTickSpacing(5);
         seleccionMineros.setPaintLabels(true);
         seleccionMineros.setPaintTicks(true);
-        seleccionMineros.setFont(new Font("Yu Gothic UI Semilight", 1, 14));
+        seleccionMineros.setFont(fuente);
         seleccionMineros.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -386,7 +417,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         });
         
         JButton botonSeleccionar= new JButton("Contratar");
-        botonSeleccionar.setFont(new Font("Yu Gothic UI Semilight", 1, 14));
+        botonSeleccionar.setFont(fuente);
         botonSeleccionar.setHorizontalAlignment(JButton.CENTER);
         botonSeleccionar.addActionListener((ActionEvent e) -> {
             int totalMineros=Integer.parseInt(setValor.getText());
@@ -467,6 +498,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables
 
     
