@@ -1,0 +1,51 @@
+[{"infomineros":{
+		"totalMineros":65,
+		"totalMinerosOro":30,
+		"totalMinerosPlata":10,
+		"totalMinerosCobre":20,
+		"totalMinerosComodin":5
+		}},{
+"infominas":{
+		"capacidadCargaOro":2,
+		"capacidadCargaPlata":3,
+		"capacidadCargaCobre":2,
+		"unidadCapacidadCarga":"kg",
+		"GananciaOro":20,
+		"GananciaPlata":15,
+		"GananciaCobre":5
+		}},{
+"minas":[{
+		"0":{
+			"tipoMineral":"oro",
+			"capacidadMineros":30,
+			"capacidadDeposito":500,
+			"unidadCapacidad":"kg",
+			"tiempoExtraccion":0.2,
+			"unidadTiempo":"segundos",
+			"velocidadDesplazamiento":40,
+			"unidadVelocidad":"m/s",
+			"ancho":5,
+			"largo":7,
+			"entradaMina":{
+				"x":1,
+				"y":1
+			},
+			"seccionesMina":[{"0":{
+				"tipo":"t",
+				"x":1,
+				"y":1
+			}},{"1":{
+				"tipo":"d",
+				"x":1,
+				"y":2
+			}},{"2":{
+				"tipo":"t",
+				"x":1,
+				"y":3
+			}}]
+			
+		}},{
+		"1":{
+			"tipoMineral":"oro"
+		}}]
+}]
