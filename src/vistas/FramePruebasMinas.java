@@ -1,17 +1,47 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
+ * To chang    @Override
+    public int getWidth(ImageObserver observer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getHeight(ImageObserver observer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ImageProducer getSource() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Graphics getGraphics() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object getProperty(String name, ImageObserver observer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+e this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package vistas;
 
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -40,6 +70,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     private LinkedList<String> detalles;
     Font fuente;
     UIManager ui;
+    Image icon;
     
       /**
      * Creates new form FramePruebasMinas
@@ -56,6 +87,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         this.fuente=new Font("Yu Gothic UI Semilight", 1, 14);
         this.ui.put("OptionPane.messageFont",fuente );
         this.ui.put("OptionPane.buttonFont",fuente );
+        seticon();
         
     }
 
@@ -500,6 +532,15 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables
+
+    private void seticon() {
+        try {
+            this.icon=ImageIO.read(new File("src/img/mine.png"));
+            setIconImage(icon);
+        } catch (IOException ex) {
+            System.out.println("no se pudo cargar la imagen");
+        }
+    }
 
     
 
