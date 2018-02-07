@@ -73,6 +73,39 @@ public class LogicaMinas {
         return listOfNodes;
     }
     
+    private LinkedList<Node> converMatrixToNodes(int[][] matrix) {
+        
+        LinkedList<Node> listOfNodes = new LinkedList<>();
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (matrix[i][j] == 1) {
+                    Node n = new Node(i, j);
+                    listOfNodes.add(n);
+                }else if(matrix[i][j] == 2){
+                    Node n = new Node(i,j);
+                }
+            }
+        }
+        for (Node x : listOfNodes) {
+            for (Node n : listOfNodes) {
+                LinkedList<Node> neighbors = new LinkedList<>();
+                if((x.getX()==n.getX())&&((x.getY()+1)==n.getY())){
+                    x.addNeighbor(n);
+                }
+                if((x.getX()==n.getX())&&((x.getY()-1)==n.getY())){
+                    x.addNeighbor(n);
+                }
+                if(((x.getX()+1)==n.getX())&&((x.getY())==n.getY())){
+                    x.addNeighbor(n);
+                }
+                if(((x.getX()-1)==n.getX())&&((x.getY())==n.getY())){
+                    x.addNeighbor(n);
+                }
+            }   
+        }
+        return listOfNodes;
+    }
+    
     /**
      *Metodo para cambiar el valor de una casilla en la mina
      * 1= camino 2=deposito
