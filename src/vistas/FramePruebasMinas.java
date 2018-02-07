@@ -578,7 +578,6 @@ public class FramePruebasMinas extends javax.swing.JFrame {
                     String type=datosSplit[i].substring(8, 9);
                     String x=datosSplit[i].substring(15, 16);
                     String y=datosSplit[i].substring(21, 22);
-                    System.out.println(panele.getName());
                     if (panele.getName().equals(x+"-"+y+"-"+mina)) {
                         if (type.equals("d")) {
                             convertirCamino(panele);
