@@ -10,10 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Set;
 import javax.json.*;
-import javax.json.stream.JsonParser;
 
 
 /**

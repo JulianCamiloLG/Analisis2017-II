@@ -38,9 +38,8 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -480,6 +479,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
             LogicaJSON archivoJSON = new LogicaJSON(ruta);
             try {
                  datos=archivoJSON.AbrirJSON();
+                 crearMinasJSON(datos);
                  System.out.println(datos[0]+"\n"+datos[1]+"\n"+datos[2]);
             } catch (FileNotFoundException ex) {
                 System.out.println("error json");
@@ -539,6 +539,14 @@ public class FramePruebasMinas extends javax.swing.JFrame {
             setIconImage(icon);
         } catch (IOException ex) {
             System.out.println("no se pudo cargar la imagen");
+        }
+    }
+
+    private void crearMinasJSON(Object[] datos) {
+        //To change body of generated methods, choose Tools | Templates.
+        LinkedHashMap minas=(LinkedHashMap) datos[2];
+        for (Object mina : minas.values()) {
+            System.out.println(mina);
         }
     }
 
