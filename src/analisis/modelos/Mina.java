@@ -221,11 +221,6 @@ public class Mina {
 
     public void setTieneEntrada(boolean tieneEntrada) {
         this.tieneEntrada = tieneEntrada;
-    }
-
-    
-    
-   
-    
+    }    
     
 }

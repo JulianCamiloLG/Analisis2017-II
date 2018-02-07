@@ -7,6 +7,7 @@ package logica;
 
 import analisis.modelos.Deposito;
 import analisis.modelos.Mina;
+import analisis.modelos.Node;
 import java.util.LinkedList;
 
 /**
@@ -37,6 +38,39 @@ public class LogicaMinas {
     public void crearMinaIniciale(int[][] matrizpaneles, int filas_columnas, String mineral, int maxMineros,String nombreMina, int capacidadDeposito){
         Mina mina = new Mina(matrizpaneles, filas_columnas, maxMineros, mineral, capacidadDeposito, maxMineros, nombreMina);
         this.minas.add(mina);
+    }
+    
+    private LinkedList<Node> converMatrixToNodes(int[][] matrix) {
+        
+        LinkedList<Node> listOfNodes = new LinkedList<>();
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (matrix[i][j] == 1) {
+                    Node n = new Node(i, j);
+                    listOfNodes.add(n);
+                }else if(matrix[i][j] == 2){
+                    Node n = new Node(i,j);
+                }
+            }
+        }
+        for (Node x : listOfNodes) {
+            for (Node n : listOfNodes) {
+                LinkedList<Node> neighbors = new LinkedList<>();
+                if((x.getX()==n.getX())&&((x.getY()+1)==n.getY())){
+                    x.addNeighbor(n);
+                }
+                if((x.getX()==n.getX())&&((x.getY()-1)==n.getY())){
+                    x.addNeighbor(n);
+                }
+                if(((x.getX()+1)==n.getX())&&((x.getY())==n.getY())){
+                    x.addNeighbor(n);
+                }
+                if(((x.getX()-1)==n.getX())&&((x.getY())==n.getY())){
+                    x.addNeighbor(n);
+                }
+            }   
+        }
+        return listOfNodes;
     }
     
     /**
