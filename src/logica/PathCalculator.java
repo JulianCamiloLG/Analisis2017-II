@@ -77,7 +77,7 @@ public class PathCalculator {
 
     public void getPath(Node current) {
         while (current != start) {
-            path.add(current);
+            path.addFirst(current);
             current.setInRoute(true);
             current = current.getPredecessor();
         }
@@ -86,6 +86,5 @@ public class PathCalculator {
     public LinkedList<Node> getPath() {
         return path;
     }
-    
-
+   
 }

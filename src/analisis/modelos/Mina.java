@@ -26,7 +26,11 @@ public class Mina {
     private String nombreMina;
     private boolean tieneEntrada;
     private int minerosContratados;
-
+    
+    private Node nodoEntrada;
+    private LinkedList<Node> nodos;
+    private LinkedList<Node> nodosDeposito;
+    
     public Mina() {
     }
     
@@ -55,8 +59,32 @@ public class Mina {
         this.gananciaMina = gananciaMina;
         this.nombreMina =nombre;
         this.tieneEntrada=false;
+    }    
+
+    public void setNodos(LinkedList<Node> nodos) {
+        this.nodos = nodos;
     }
 
+    public void setNodoEntrada(Node nodoEntrada) {
+        this.nodoEntrada = nodoEntrada;
+    }
+
+    public void setNodosDeposito(LinkedList<Node> nodosDeposito) {
+        this.nodosDeposito = nodosDeposito;
+    }
+
+    public Node getNodoEntrada() {
+        return nodoEntrada;
+    }
+
+    public LinkedList<Node> getNodos() {
+        return nodos;
+    }
+
+    public LinkedList<Node> getNodosDeposito() {
+        return nodosDeposito;
+    }
+    
     
     
     /**

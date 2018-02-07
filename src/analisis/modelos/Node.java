@@ -15,6 +15,7 @@ public class Node {
     private int x;
     private int y;
     private int cost;
+    private int type;
     private ArrayList<Node> neighbors;
     private Node predecessor;
     private boolean inRoute;
@@ -22,6 +23,7 @@ public class Node {
     public Node(int x, int y) {
         this.x = x;
         this.y = y;
+        this.type = 1;
         this.cost = 0;
         neighbors = new ArrayList<>();
         this.predecessor = null;
@@ -34,6 +36,14 @@ public class Node {
     
     public void setCost(int cost) {
         this.cost = cost;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
     }
 
     public void setInRoute(boolean inRoute) {

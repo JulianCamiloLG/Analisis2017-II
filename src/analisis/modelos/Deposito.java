@@ -13,13 +13,17 @@ public class Deposito {
     
     private String mineral;
     private int cantidadMineral;
+    private int x;
+    private int y;
 
     public Deposito() {
     }
 
-    public Deposito(String mineral, int cantidadMineral) {
+    public Deposito(String mineral, int cantidadMineral, int x, int y) {
         this.mineral = mineral;
         this.cantidadMineral = cantidadMineral;
+        this.x = x;
+        this.y = y;
     }
 
     @Override
@@ -56,7 +60,22 @@ public class Deposito {
     public void setCantidadMineral(int cantidadMineral) {
         this.cantidadMineral = cantidadMineral;
     }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
     
+    public int getY() {
+        return y;
+    }
+
+    public int getX() {
+        return x;
+    }
     
     
     
