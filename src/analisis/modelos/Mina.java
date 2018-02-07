@@ -26,6 +26,7 @@ public class Mina {
     private String nombreMina;
     private boolean tieneEntrada;
     private int minerosContratados;
+    private int cantidadDeposito;
 
     public Mina() {
     }
@@ -221,11 +222,6 @@ public class Mina {
 
     public void setTieneEntrada(boolean tieneEntrada) {
         this.tieneEntrada = tieneEntrada;
-    }
-
-    
-    
-   
-    
+    }    
     
 }

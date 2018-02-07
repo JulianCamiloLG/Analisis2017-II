@@ -81,11 +81,11 @@ public class LogicaJSON{
             String nombreMina = "Mina "+minaActual.keySet().toString().substring(1, 2);
             JsonObject detalleMina = minaActual.getJsonObject(minaActual.keySet().toString().substring(1, 2));
             for (JsonValue string : detalleMina.values()) {
-                System.out.println(cont);
                 detalles[cont]=string.toString();
                 cont++;
             }
             infoMinasCompleta.put(nombreMina, detalles);
+            detalles=new String[12];
         }
         return infoMinasCompleta;
     }

@@ -40,11 +40,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
@@ -67,9 +69,10 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     private int xMina;
     private int yMina;
     private LinkedList<String> detalles;
-    Font fuente;
-    UIManager ui;
-    Image icon;
+    private Font fuente;
+    private UIManager ui;
+    private Image icon;
+    private LinkedList<Prueba> paneles;
     
       /**
      * Creates new form FramePruebasMinas
@@ -77,6 +80,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     public FramePruebasMinas() {
         initComponents();
         this.esEntrada=false;
+        this.paneles=new LinkedList();
         this.logicaMinas= new LogicaMinas();
         this.cantMinas=0;
         this.xMina=40;
@@ -91,15 +95,15 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     }
 
     
-    public void crearMina(int tamaño, String material, int minerosMaximos, int capacidadDeposito) {
+    public void crearMina(int tamaño,int tamaño1, String material, int minerosMaximos, int capacidadDeposito) {
         this.esEntrada=false;
         String numeroPanel;
-        int mina[][] = new int[tamaño][tamaño];
+        int mina[][] = new int[tamaño][tamaño1];
         int xaux = xMina;
         int yaux = yMina;
         int xtotal = xMina;
         for (int i = 0; i < tamaño; i++) {
-            for (int j = 0; j < tamaño; j++) {
+            for (int j = 0; j < tamaño1; j++) {
                 numeroPanel = "" + i + "-" + j + "-" + "Mina " + cantMinas;
                 mina[i][j] = 0;
                 crearPanel(xaux, yaux, numeroPanel);
@@ -120,6 +124,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
         panel.setName(nombre);
         panel.setFocusable(true);
         configurarEventosPanel(panel);
+        this.paneles.add(panel);
         this.fondo2.add(panel);
     }
     
@@ -194,9 +199,9 @@ public class FramePruebasMinas extends javax.swing.JFrame {
     }
     
     private void convertirDeposito(Prueba panel) {
-        int cantidadDeposito = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el total de material en este deposito"));
+        
         String[] datos=ArrayDatosPanel(panel);
-        boolean result=logicaMinas.crearNuevoDeposito(cantidadDeposito,Integer.parseInt(datos[1]),Integer.parseInt(datos[2]),datos[0]);
+        boolean result=logicaMinas.crearNuevoDeposito(Integer.parseInt(datos[1]),Integer.parseInt(datos[2]),datos[0]);
         if (result) {
             cambiarfondo(2, panel);
         } else {
@@ -393,7 +398,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
                     if (dep != null) {
                         int mineros = Integer.parseInt(dep);
                         int deposito = Integer.parseInt(min);
-                        crearMina(tamaño, material, mineros, deposito);
+                        crearMina(tamaño,tamaño, material, mineros, deposito);
                         this.repaint();
                     }
                 }
@@ -480,7 +485,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
             try {
                  datos=archivoJSON.AbrirJSON();
                  crearMinasJSON(datos);
-                 System.out.println(datos[0]+"\n"+datos[1]+"\n"+datos[2]);
+                 //System.out.println(datos[0]+"\n"+datos[1]+"\n"+datos[2]);
             } catch (FileNotFoundException ex) {
                 System.out.println("error json");
             }
@@ -544,9 +549,75 @@ public class FramePruebasMinas extends javax.swing.JFrame {
 
     private void crearMinasJSON(Object[] datos) {
         //To change body of generated methods, choose Tools | Templates.
-        LinkedHashMap minas=(LinkedHashMap) datos[2];
-        for (Object mina : minas.values()) {
-            System.out.println(mina);
+        LinkedHashMap<String,String[]> minas=(LinkedHashMap) datos[2];
+        int cont=0;
+        for (Map.Entry<String, String[]> mina : minas.entrySet()) {
+            String key = mina.getKey();
+            String[] value= mina.getValue();
+            crearMinaJSON(value, key);
+        }
+    }
+
+    private void crearMinaJSON(String[] value, String key) {
+         //To change body of generated methods, choose Tools | Templates.
+         String material=value[0];
+         int mineros=Integer.parseInt(value[1]);
+         int deposito=Integer.parseInt(value[2]);
+         int width=Integer.parseInt(value[8]);
+         int height=Integer.parseInt(value[9]);
+         String entrada=value[10];
+         crearMina(height,width, material, mineros, deposito);
+         this.repaint();
+         String detallesMina=value[11];
+         detallarMina(detallesMina, key,deposito, entrada);
+    }
+
+    private void detallarMina(String detallesMina,String mina,int deposito, String entrada ) {
+         //To change body of generated methods, choose Tools | Templates.
+         String datos[]=detallesMina.split("\\{|\\}|\\[|\\]");
+         
+         int cont=0;
+         for (String dato : datos) {
+             if(!dato.isEmpty() && !dato.equals(",")){
+                 cont++;
+             }
+        }
+         String datosSplit[]= new String[cont];
+         cont=0;
+         for (String dato : datos) {
+             if(!dato.isEmpty() && !dato.equals(",")){
+                 datosSplit[cont]=dato;
+                 cont++;
+             }
+        }
+         detallarPanel(mina,datosSplit,deposito,entrada);
+    }
+
+    private void detallarPanel(String mina, String[] datosSplit,int deposito, String entrada) {
+       //To change body of generated methods, choose Tools | Templates.
+        for (Prueba panele : paneles) {
+            if (panele.getName().contains(mina)) {
+                String xEntrada=entrada.substring(5,6);
+                String yEntrada=entrada.substring(11,12);
+                if (panele.getName().equals(xEntrada+"-"+yEntrada+"-"+mina)) {
+                    convertirEntrada(panele);
+                }
+                for (int i = 1; i < datosSplit.length; i+=2) {
+                    String type=datosSplit[i].substring(8, 9);
+                    String x=datosSplit[i].substring(15, 16);
+                    String y=datosSplit[i].substring(21, 22);
+                    System.out.println(panele.getName());
+                    if (panele.getName().equals(x+"-"+y+"-"+mina)) {
+                        if (type.equals("d")) {
+                            convertirCamino(panele);
+                        }
+                        else{
+                            convertirDeposito(panele);
+                        }
+                    }
+                }
+                
+            }
         }
     }
 
