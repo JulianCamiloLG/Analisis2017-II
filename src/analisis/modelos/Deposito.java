@@ -19,11 +19,9 @@ public class Deposito {
     public Deposito() {
     }
 
-    public Deposito(String mineral, int cantidadMineral, int x, int y) {
+    public Deposito(String mineral, int cantidadMineral) {
         this.mineral = mineral;
         this.cantidadMineral = cantidadMineral;
-        this.x = x;
-        this.y = y;
     }
 
     @Override
