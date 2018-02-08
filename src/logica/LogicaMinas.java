@@ -130,22 +130,33 @@ public class LogicaMinas {
      * @param nombreMina
      * @return
      */
-    public boolean crearNuevoDeposito(int cantidadDeposito, int posicionI, int posicionJ, String nombreMina) {
+    public boolean crearNuevoDeposito(int posicionI, int posicionJ, String nombreMina) {
         boolean result = false;
         int cantidadMaterialActual = 0;
         int posicion = buscarMinaNombre(nombreMina);
         cantidadMaterialActual = minas.get(posicion).getDepositos().stream().map((dep) -> dep.getCantidadMineral()).reduce(cantidadMaterialActual, Integer::sum);
         if (posicion != -1) {
+<<<<<<< HEAD
             if ((cantidadMaterialActual + cantidadDeposito) <= minas.get(posicion).getValorTotal()) {
                 if (this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ] == 3) {
                     this.minas.get(posicion).setTieneEntrada(false);
                 }
                 Deposito nuevo = new Deposito(this.minas.get(posicion).getMetal(), cantidadDeposito, posicionI, posicionJ);
+=======
+                if(this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ] == 3){
+                    this.minas.get(posicion).setTieneEntrada(false);
+                }
+                Deposito nuevo = new Deposito(this.minas.get(posicion).getMetal(),(int)this.minas.get(posicion).getValorTotal());
+>>>>>>> master
                 this.minas.get(posicion).getDepositos().add(nuevo);
                 this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ] = 2;
                 result = true;
+<<<<<<< HEAD
 
             }
+=======
+                
+>>>>>>> master
         }
         return result;
     }

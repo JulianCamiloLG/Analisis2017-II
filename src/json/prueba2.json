@@ -16,7 +16,7 @@
 		}},{
 "minas":[{
 		"0":{
-			"tipoMineral":"oro",
+			"tipoMineral":"Oro",
 			"capacidadMineros":30,
 			"capacidadDeposito":500,
 			"unidadCapacidad":"kg",
@@ -46,6 +46,32 @@
 			
 		}},{
 		"1":{
-			"tipoMineral":"oro"
+			"tipoMineral":"Plata",
+			"capacidadMineros":20,
+			"capacidadDeposito":400,
+			"unidadCapacidad":"kg",
+			"tiempoExtraccion":0.6,
+			"unidadTiempo":"segundos",
+			"velocidadDesplazamiento":40,
+			"unidadVelocidad":"m/s",
+			"ancho":6,
+			"largo":7,
+			"entradaMina":{
+				"x":0,
+				"y":4
+			},
+			"seccionesMina":[{"0":{
+				"tipo":"t",
+				"x":1,
+				"y":1
+			}},{"1":{
+				"tipo":"d",
+				"x":1,
+				"y":2
+			}},{"2":{
+				"tipo":"t",
+				"x":1,
+				"y":3
+			}}]
 		}}]
 }]

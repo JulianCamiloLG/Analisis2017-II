@@ -26,11 +26,16 @@ public class Mina {
     private String nombreMina;
     private boolean tieneEntrada;
     private int minerosContratados;
+<<<<<<< HEAD
     
     private Node nodoEntrada;
     private LinkedList<Node> nodos;
     private LinkedList<Node> nodosDeposito;
     
+=======
+    private int cantidadDeposito;
+
+>>>>>>> master
     public Mina() {
     }
     

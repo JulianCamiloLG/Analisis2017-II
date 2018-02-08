@@ -2,6 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group>
             <file>file:/C:/Users/Sebastian/Documents/GitHub/Analisis2017-II/Analisis2017-II/src/logica/PathCalculator.java</file>
             <file>file:/C:/Users/Sebastian/Documents/GitHub/Analisis2017-II/Analisis2017-II/src/vistas/FramePruebasMinas.java</file>
@@ -11,5 +12,8 @@
             <file>file:/C:/Users/Sebastian/Documents/GitHub/Analisis2017-II/Analisis2017-II/src/vistas/Prueba.java</file>
             <file>file:/C:/Users/Sebastian/Documents/GitHub/Analisis2017-II/Analisis2017-II/src/analisis/modelos/Mina.java</file>
         </group>
+=======
+        <group/>
+>>>>>>> master
     </open-files>
 </project-private>
