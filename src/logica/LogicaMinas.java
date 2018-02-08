@@ -142,7 +142,7 @@ public class LogicaMinas {
                 if(this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ] == 3){
                     this.minas.get(posicion).setTieneEntrada(false);
                 }
-                Deposito nuevo = new Deposito(this.minas.get(posicion).getMetal(),(int)this.minas.get(posicion).getValorTotal());
+                Deposito nuevo = new Deposito(this.minas.get(posicion).getMetal(),(int)this.minas.get(posicion).getValorTotal(), posicionI,posicionJ);
                 this.minas.get(posicion).getDepositos().add(nuevo);
                 this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ] = 2;
                 result = true;
