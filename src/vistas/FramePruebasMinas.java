@@ -282,6 +282,7 @@ public class FramePruebasMinas extends javax.swing.JFrame {
             }
         });
 
+        fondo2.setAutoscrolls(true);
         fondo2.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout fondo2Layout = new javax.swing.GroupLayout(fondo2);
@@ -607,8 +608,5 @@ public class FramePruebasMinas extends javax.swing.JFrame {
             }
         }
     }
-
-    
-
-    
+   
 }
