@@ -26,8 +26,16 @@ public class Mina {
     private String nombreMina;
     private boolean tieneEntrada;
     private int minerosContratados;
+<<<<<<< HEAD
+    
+    private Node nodoEntrada;
+    private LinkedList<Node> nodos;
+    private LinkedList<Node> nodosDeposito;
+    
+=======
     private int cantidadDeposito;
 
+>>>>>>> master
     public Mina() {
     }
     
@@ -37,6 +45,9 @@ public class Mina {
         this.x=x;
         this.y=y;
         this.metal=metal;
+        nodoEntrada = new Node(0, 0);
+        nodos = new LinkedList<>();
+        nodosDeposito = new LinkedList<>();
     }
 
     public Mina(int[][] matrizdepaneles, int filas_columnas, int maxmineros, LinkedList<Deposito> depositos) {
@@ -56,8 +67,32 @@ public class Mina {
         this.gananciaMina = gananciaMina;
         this.nombreMina =nombre;
         this.tieneEntrada=false;
+    }    
+
+    public void setNodos(LinkedList<Node> nodos) {
+        this.nodos = nodos;
     }
 
+    public void setNodoEntrada(Node nodoEntrada) {
+        this.nodoEntrada = nodoEntrada;
+    }
+
+    public void setNodosDeposito(LinkedList<Node> nodosDeposito) {
+        this.nodosDeposito = nodosDeposito;
+    }
+
+    public Node getNodoEntrada() {
+        return nodoEntrada;
+    }
+
+    public LinkedList<Node> getNodos() {
+        return nodos;
+    }
+
+    public LinkedList<Node> getNodosDeposito() {
+        return nodosDeposito;
+    }
+    
     
     
     /**

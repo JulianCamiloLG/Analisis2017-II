@@ -15,18 +15,17 @@ import java.util.LinkedList;
  * @author JulianCamilo
  */
 public class LogicaMinas {
-    
-    
+
     private LinkedList<Mina> minas;
-            
+
     public LogicaMinas() {
         this.minas = new LinkedList<>();
 
     }
-    
-    
-     /**
-     *Metodo para crear la mina inicial y vacia
+
+    /**
+     * Metodo para crear la mina inicial y vacia
+     *
      * @param matrizpaneles
      * @param filas_columnas
      * @param mineral
@@ -35,47 +34,75 @@ public class LogicaMinas {
      * @param x
      * @param y
      */
-    public void crearMinaIniciale(int[][] matrizpaneles, int filas_columnas, String mineral, int maxMineros,String nombreMina, int capacidadDeposito){
+    public void crearMinaIniciale(int[][] matrizpaneles, int filas_columnas, String mineral, int maxMineros, String nombreMina, int capacidadDeposito) {
         Mina mina = new Mina(matrizpaneles, filas_columnas, maxMineros, mineral, capacidadDeposito, maxMineros, nombreMina);
         this.minas.add(mina);
     }
-    
-    private LinkedList<Node> converMatrixToNodes(int[][] matrix) {
-        
+
+    private void convertMatrixToNodes(int posicion) {
         LinkedList<Node> listOfNodes = new LinkedList<>();
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                if (matrix[i][j] == 1) {
+        LinkedList<Node> listOfDepositos = new LinkedList<>();
+        for (int i = 0; i < minas.get(posicion).getMatrizdepaneles().length; i++) {
+            for (int j = 0; j < minas.get(posicion).getMatrizdepaneles()[i].length; j++) {
+                if (minas.get(posicion).getMatrizdepaneles()[i][j] > 0) {
                     Node n = new Node(i, j);
+                    if (minas.get(posicion).getMatrizdepaneles()[i][j] == 2) {
+                        n.setType(2);
+                    } else if (minas.get(posicion).getMatrizdepaneles()[i][j] == 3) {
+                        n.setType(3);
+                    }
                     listOfNodes.add(n);
-                }else if(matrix[i][j] == 2){
-                    Node n = new Node(i,j);
                 }
             }
         }
-        for (Node x : listOfNodes) {
+        for (int i = 0; i < listOfNodes.size(); i++) {
             for (Node n : listOfNodes) {
                 LinkedList<Node> neighbors = new LinkedList<>();
-                if((x.getX()==n.getX())&&((x.getY()+1)==n.getY())){
-                    x.addNeighbor(n);
+                if ((listOfNodes.get(i).getX() == n.getX()) && ((listOfNodes.get(i).getY() + 1) == n.getY())) {
+                    listOfNodes.get(i).addNeighbor(n);
                 }
-                if((x.getX()==n.getX())&&((x.getY()-1)==n.getY())){
-                    x.addNeighbor(n);
+                if ((listOfNodes.get(i).getX() == n.getX()) && ((listOfNodes.get(i).getY() - 1) == n.getY())) {
+                    listOfNodes.get(i).addNeighbor(n);
                 }
-                if(((x.getX()+1)==n.getX())&&((x.getY())==n.getY())){
-                    x.addNeighbor(n);
+                if (((listOfNodes.get(i).getX() + 1) == n.getX()) && ((listOfNodes.get(i).getY()) == n.getY())) {
+                    listOfNodes.get(i).addNeighbor(n);
                 }
-                if(((x.getX()-1)==n.getX())&&((x.getY())==n.getY())){
-                    x.addNeighbor(n);
+                if (((listOfNodes.get(i).getX() - 1) == n.getX()) && ((listOfNodes.get(i).getY()) == n.getY())) {
+                    listOfNodes.get(i).addNeighbor(n);
                 }
-            }   
+            }
+            if (listOfNodes.get(i).getType() == 2) {
+                listOfDepositos.add(listOfNodes.get(i));
+            } else if (listOfNodes.get(i).getType() == 3) {
+                minas.get(posicion).setNodoEntrada(listOfNodes.get(i));
+            }
         }
-        return listOfNodes;
+        minas.get(posicion).setNodos(listOfNodes);
+        minas.get(posicion).setNodosDeposito(listOfDepositos);
     }
-    
+
+    //Crea los caminos de la mina.
+    public void crearCaminosMina(int posicion) {
+        convertMatrixToNodes(posicion);
+        for (Node d : minas.get(posicion).getNodosDeposito()) {
+            //for (Node n : d.getNeighbors()) {
+            PathCalculator path = new PathCalculator(minas.get(posicion).getNodoEntrada(), d);
+            path.FindPath();
+            System.out.println("" + path.getPath().toString());
+            //}
+        }
+    }
+
+    public void minasPath() {
+        for (int i = 0; i < minas.size(); i++) {
+            crearCaminosMina(i);
+        }
+    }
+
     /**
-     *Metodo para cambiar el valor de una casilla en la mina
-     * 1= camino 2=deposito
+     * Metodo para cambiar el valor de una casilla en la mina 1= camino
+     * 2=deposito
+     *
      * @param posicionMina la posicion en la lista que tiene la mina
      * @param columna la columna donde se insertara el cambio
      * @param fila la fila donde se insertara el cambio
@@ -95,14 +122,13 @@ public class LogicaMinas {
 //        }
 //        return result;
 //    }
-    
     /**
      *
      * @param cantidadDeposito
      * @param posicionI
      * @param posicionJ
      * @param nombreMina
-     * @return 
+     * @return
      */
     public boolean crearNuevoDeposito(int posicionI, int posicionJ, String nombreMina) {
         boolean result = false;
@@ -110,37 +136,51 @@ public class LogicaMinas {
         int posicion = buscarMinaNombre(nombreMina);
         cantidadMaterialActual = minas.get(posicion).getDepositos().stream().map((dep) -> dep.getCantidadMineral()).reduce(cantidadMaterialActual, Integer::sum);
         if (posicion != -1) {
+<<<<<<< HEAD
+            if ((cantidadMaterialActual + cantidadDeposito) <= minas.get(posicion).getValorTotal()) {
+                if (this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ] == 3) {
+                    this.minas.get(posicion).setTieneEntrada(false);
+                }
+                Deposito nuevo = new Deposito(this.minas.get(posicion).getMetal(), cantidadDeposito, posicionI, posicionJ);
+=======
                 if(this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ] == 3){
                     this.minas.get(posicion).setTieneEntrada(false);
                 }
                 Deposito nuevo = new Deposito(this.minas.get(posicion).getMetal(),(int)this.minas.get(posicion).getValorTotal());
+>>>>>>> master
                 this.minas.get(posicion).getDepositos().add(nuevo);
-                this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ]=2;
+                this.minas.get(posicion).getMatrizdepaneles()[posicionI][posicionJ] = 2;
                 result = true;
+<<<<<<< HEAD
+
+            }
+=======
                 
+>>>>>>> master
         }
         return result;
     }
-    
+
     /**
      * Metodo para asignarle a una mina sus mineros
+     *
      * @param posicionMina la posicion en la lista que tiene la mina
      * @param mineros la lista con los mineros que se desean ingresar a esa mina
      * @return si se lograron ingresar o no
      */
-    public boolean ingresarMineros(int posicionMina, LinkedList mineros){
-       boolean result=false;
-       if(this.minas.get(posicionMina).getMaxmineros()==mineros.size()){
-           result = true;
-       }
-       return result;
+    public boolean ingresarMineros(int posicionMina, LinkedList mineros) {
+        boolean result = false;
+        if (this.minas.get(posicionMina).getMaxmineros() == mineros.size()) {
+            result = true;
+        }
+        return result;
     }
 
     private int buscarMinaNombre(String nombreMina) {
-        int indexMina =-1;
+        int indexMina = -1;
         for (Mina mina : minas) {
-            if(mina.getNombreMina().equals(nombreMina)){
-                indexMina=minas.indexOf(mina);
+            if (mina.getNombreMina().equals(nombreMina)) {
+                indexMina = minas.indexOf(mina);
             }
         }
         return indexMina;
@@ -159,7 +199,7 @@ public class LogicaMinas {
         return result;
 
     }
-    
+
     public boolean crearEntrada(String nombreMina, int posicion_i_matriz, int posicion_j_matriz) {
         boolean result = false;
         int minaModificar = buscarMinaNombre(nombreMina);
@@ -170,9 +210,9 @@ public class LogicaMinas {
         }
         return result;
     }
-    
+
     public boolean cancelarCambio(String nombreMina, int posicion_i_matriz, int posicion_j_matriz) {
-    boolean result = false;
+        boolean result = false;
         int minaModificar = buscarMinaNombre(nombreMina);
         if (minaModificar != -1) {
             if (this.minas.get(minaModificar).getMatrizdepaneles()[posicion_i_matriz][posicion_j_matriz] == 3) {
@@ -185,12 +225,12 @@ public class LogicaMinas {
     }
 
     public boolean isEntrada(int posicion_i_matriz, int posicion_j_matriz, String nombreMina) {
-        boolean result =false;
-        int minaBuscada=buscarMinaNombre(nombreMina);
-        if (posicion_i_matriz==0 || posicion_i_matriz==this.minas.get(minaBuscada).getFilas_columnas()-1 || posicion_j_matriz==0 || posicion_j_matriz==this.minas.get(minaBuscada).getFilas_columnas()-1) { 
+        boolean result = false;
+        int minaBuscada = buscarMinaNombre(nombreMina);
+        if (posicion_i_matriz == 0 || posicion_i_matriz == this.minas.get(minaBuscada).getFilas_columnas() - 1 || posicion_j_matriz == 0 || posicion_j_matriz == this.minas.get(minaBuscada).getFilas_columnas() - 1) {
             if (!this.minas.get(minaBuscada).isTieneEntrada()) {
-                result=true;
-            }  
+                result = true;
+            }
         }
         return result;
     }
