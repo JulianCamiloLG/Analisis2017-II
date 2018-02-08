@@ -40,18 +40,17 @@ public class LogicaMinas {
     }
 
     private void convertMatrixToNodes(int posicion) {
-        int[][] matrix = minas.get(posicion).getMatrizdepaneles();
         LinkedList<Node> listOfNodes = new LinkedList<>();
         LinkedList<Node> listOfDepositos = new LinkedList<>();
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                Node n = new Node(i, j);
-                if (matrix[i][j] == 2) {
-                    n.setType(2);
-                } else if (matrix[i][j] == 3) {
-                    n.setType(3);
-                }
-                if (matrix[i][j] > 0) {
+        for (int i = 0; i < minas.get(posicion).getMatrizdepaneles().length; i++) {
+            for (int j = 0; j < minas.get(posicion).getMatrizdepaneles()[i].length; j++) {
+                if (minas.get(posicion).getMatrizdepaneles()[i][j] > 0) {
+                    Node n = new Node(i, j);
+                    if (minas.get(posicion).getMatrizdepaneles()[i][j] == 2) {
+                        n.setType(2);
+                    } else if (minas.get(posicion).getMatrizdepaneles()[i][j] == 3) {
+                        n.setType(3);
+                    }
                     listOfNodes.add(n);
                 }
             }
@@ -78,6 +77,8 @@ public class LogicaMinas {
                 minas.get(posicion).setNodoEntrada(listOfNodes.get(i));
             }
         }
+        minas.get(posicion).setNodos(listOfNodes);
+        minas.get(posicion).setNodosDeposito(listOfDepositos);
     }
 
     //Crea los caminos de la mina.
@@ -85,8 +86,16 @@ public class LogicaMinas {
         convertMatrixToNodes(posicion);
         for (Node d : minas.get(posicion).getNodosDeposito()) {
             //for (Node n : d.getNeighbors()) {
-                PathCalculator path = new PathCalculator(minas.get(posicion).getNodoEntrada(), d);
+            PathCalculator path = new PathCalculator(minas.get(posicion).getNodoEntrada(), d);
+            path.FindPath();
+            System.out.println("" + path.getPath().toString());
             //}
+        }
+    }
+
+    public void minasPath() {
+        for (int i = 0; i < minas.size(); i++) {
+            crearCaminosMina(i);
         }
     }
 

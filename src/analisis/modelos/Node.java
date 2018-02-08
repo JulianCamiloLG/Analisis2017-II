@@ -73,6 +73,12 @@ public class Node {
     public Node getPredecessor() {
         return predecessor;
     }
+
+    @Override
+    public String toString() {
+        return ("{"+this.x+"-"+this.y+"}"); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
     
 }

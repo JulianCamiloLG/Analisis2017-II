@@ -40,6 +40,9 @@ public class Mina {
         this.x=x;
         this.y=y;
         this.metal=metal;
+        nodoEntrada = new Node(0, 0);
+        nodos = new LinkedList<>();
+        nodosDeposito = new LinkedList<>();
     }
 
     public Mina(int[][] matrizdepaneles, int filas_columnas, int maxmineros, LinkedList<Deposito> depositos) {
